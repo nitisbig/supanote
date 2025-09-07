@@ -1,13 +1,19 @@
 import { NextResponse } from 'next/server';
 import type { Note } from '@/types/note';
+import { supabase } from '@/lib/supabase';
 
 export async function POST(req: Request) {
   const note: Note = await req.json();
-  const { Pool } = await import('pg');
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-  await pool.query(
-    'insert into notes (id, title, content, created_at) values ($1, $2, $3, to_timestamp($4 / 1000.0))',
-    [note.id, note.title, note.content, note.createdAt]
-  );
+  const { error } = await supabase.from('notes').insert({
+    id: note.id,
+    title: note.title,
+    content: note.content,
+    created_at: new Date(note.createdAt).toISOString(),
+  });
+
+  if (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+
   return NextResponse.json({ success: true });
 }
