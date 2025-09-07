@@ -6,7 +6,7 @@ import { Note } from '@/types/note';
 
 interface NotesContextValue {
   notes: Note[];
-  add: (title: string, content: string) => void;
+  add: (title: string, content: string) => Promise<void>;
   remove: (id: string) => void;
 }
 
@@ -26,9 +26,18 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
 
-  const add = (title: string, content: string) => {
+  const add = async (title: string, content: string) => {
     const note = createNote({ title, content });
     setNotes((prev) => addNote(prev, note));
+    try {
+      await fetch('/api/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(note),
+      });
+    } catch (err) {
+      console.error('Failed to save note', err);
+    }
   };
 
   const remove = (id: string) => {

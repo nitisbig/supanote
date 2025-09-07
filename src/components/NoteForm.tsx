@@ -8,10 +8,10 @@ export default function NoteForm() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() && !content.trim()) return;
-    add(title, content);
+    await add(title, content);
     setTitle('');
     setContent('');
   };
