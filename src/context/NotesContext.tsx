@@ -28,14 +28,19 @@ export const NotesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const add = async (title: string, content: string) => {
     const note = createNote({ title, content });
-    setNotes((prev) => addNote(prev, note));
     try {
-      await fetch('/api/notes', {
+      const res = await fetch('/api/notes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(note),
       });
+      if (!res.ok) {
+        throw new Error('Request failed');
+      }
+      setNotes((prev) => addNote(prev, note));
     } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      alert(`Failed to save note: ${message}`);
       console.error('Failed to save note', err);
     }
   };
