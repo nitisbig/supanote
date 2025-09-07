@@ -13,6 +13,7 @@ export default function Page() {
     // object causes an error and the note is not saved.
     const { error } = await supabase.from('notes').insert([{ text }]);
     if (error) {
+      console.error('Failed to save note:', error);
       alert('Failed to save note');
       return;
     }
