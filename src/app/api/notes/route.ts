@@ -4,6 +4,11 @@ import { supabase } from '@/lib/supabase';
 
 export async function POST(req: Request) {
   const note: Note = await req.json();
+
+  if (!supabase) {
+    return NextResponse.json({ success: true });
+  }
+
   const { error } = await supabase.from('notes').insert({
     id: note.id,
     title: note.title,
