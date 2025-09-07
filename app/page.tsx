@@ -17,12 +17,13 @@ export default function Page() {
       alert('Failed to save note');
       return false;
     }
-    setNotes([...notes, text]);
+    // Use functional update to avoid stale state when adding notes
+    setNotes((current) => [...current, text]);
     return true;
   }
 
   function deleteNote(index: number) {
-    setNotes(notes.filter((_, i) => i !== index));
+    setNotes((current) => current.filter((_, i) => i !== index));
   }
 
   return (
