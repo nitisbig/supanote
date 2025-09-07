@@ -2,14 +2,18 @@
 
 import { useState, FormEvent } from 'react';
 
-export default function NoteForm({ onAdd }: { onAdd: (text: string) => void }) {
+export default function NoteForm({
+  onAdd,
+}: {
+  onAdd: (text: string) => Promise<void>;
+}) {
   const [text, setText] = useState('');
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const trimmed = text.trim();
     if (!trimmed) return;
-    onAdd(trimmed);
+    await onAdd(trimmed);
     setText('');
   }
 
