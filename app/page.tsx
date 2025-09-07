@@ -14,7 +14,7 @@ export default function Page() {
     const { error } = await supabase.from('notes').insert([{ text }]);
     if (error) {
       console.error('Failed to save note:', error);
-      alert('Failed to save note');
+      alert(`Failed to save note: ${error.message}`);
       return false;
     }
     // Use functional update to avoid stale state when adding notes
