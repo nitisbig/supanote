@@ -5,7 +5,9 @@ import { useState, FormEvent } from 'react';
 export default function NoteForm({
   onAdd,
 }: {
-  onAdd: (text: string) => Promise<void>;
+  // Return a boolean so the form knows whether the save succeeded.
+  // This lets us avoid clearing the input on failure.
+  onAdd: (text: string) => Promise<boolean>;
 }) {
   const [text, setText] = useState('');
 
@@ -13,8 +15,10 @@ export default function NoteForm({
     e.preventDefault();
     const trimmed = text.trim();
     if (!trimmed) return;
-    await onAdd(trimmed);
-    setText('');
+    const saved = await onAdd(trimmed);
+    if (saved) {
+      setText('');
+    }
   }
 
   return (
