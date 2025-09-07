@@ -28,7 +28,9 @@ export default function NoteForm({
         onChange={(e) => setText(e.target.value)}
         placeholder="Write a note"
       />
-      <button type="submit">Add</button>
+      <button type="submit" className="create-button">
+        Create
+      </button>
     </form>
   );
 }
