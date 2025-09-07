@@ -15,7 +15,10 @@ export default function NoteList() {
         <li key={n.id} className="border p-2 rounded">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="font-semibold">{n.title}</h3>
+              <h3 className="font-semibold flex items-center">
+                {n.title}
+                <span className="text-green-600 ml-2">✓</span>
+              </h3>
               <p>{n.content}</p>
             </div>
             <button onClick={() => remove(n.id)} className="text-red-600">
