@@ -9,7 +9,9 @@ export default function Page() {
   const [notes, setNotes] = useState<string[]>([]);
 
   async function addNote(text: string) {
-    const { error } = await supabase.from('notes').insert({ text });
+    // Supabase expects an array of objects for inserts. Sending a plain
+    // object causes an error and the note is not saved.
+    const { error } = await supabase.from('notes').insert([{ text }]);
     if (error) {
       alert('Failed to save note');
       return;
