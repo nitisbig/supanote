@@ -3,11 +3,17 @@
 import { useState } from 'react';
 import NoteForm from '../components/NoteForm';
 import NoteList from '../components/NoteList';
+import { supabase } from '../lib/supabase';
 
 export default function Page() {
   const [notes, setNotes] = useState<string[]>([]);
 
-  function addNote(text: string) {
+  async function addNote(text: string) {
+    const { error } = await supabase.from('notes').insert({ text });
+    if (error) {
+      alert('Failed to save note');
+      return;
+    }
     setNotes([...notes, text]);
   }
 
