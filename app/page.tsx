@@ -8,16 +8,17 @@ import { supabase } from '../lib/supabase';
 export default function Page() {
   const [notes, setNotes] = useState<string[]>([]);
 
-  async function addNote(text: string) {
+  async function addNote(text: string): Promise<boolean> {
     // Supabase expects an array of objects for inserts. Sending a plain
     // object causes an error and the note is not saved.
     const { error } = await supabase.from('notes').insert([{ text }]);
     if (error) {
       console.error('Failed to save note:', error);
       alert('Failed to save note');
-      return;
+      return false;
     }
     setNotes([...notes, text]);
+    return true;
   }
 
   function deleteNote(index: number) {
