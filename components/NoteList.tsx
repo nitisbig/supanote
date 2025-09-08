@@ -5,7 +5,9 @@ import { EditIcon, DeleteIcon } from './Icons';
 
 interface Note {
   id: string;
+  title: string;
   text: string;
+  date: string;
 }
 
 export default function NoteList({
@@ -15,7 +17,7 @@ export default function NoteList({
 }: {
   notes: Note[];
   onDelete: (id: string) => void;
-  onEdit: (id: string, text: string) => void;
+  onEdit: (id: string, title: string, text: string) => void;
 }) {
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [items, setItems] = useState(notes);
@@ -67,14 +69,20 @@ export default function NoteList({
             onDrop={handleDrop(index)}
             tabIndex={0}
           >
+            <span className="note-title">{note.title}</span>
+            <span className="note-date">
+              {new Date(note.date).toLocaleDateString()}
+            </span>
             <span className="note-text">{note.text}</span>
             <div className="note-actions">
               <button
                 aria-label="Edit"
                 onClick={() => {
+                  const newTitle = prompt('Edit title', note.title);
+                  if (newTitle === null) return;
                   const newText = prompt('Edit note', note.text);
                   if (newText !== null) {
-                    onEdit(note.id, newText);
+                    onEdit(note.id, newTitle, newText);
                   }
                 }}
               >
