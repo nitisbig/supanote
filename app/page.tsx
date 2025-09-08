@@ -7,7 +7,9 @@ import { supabase } from '../lib/supabase';
 
 interface Note {
   id: string;
+  title: string;
   text: string;
+  date: string;
 }
 
 export default function Page() {
@@ -26,10 +28,14 @@ export default function Page() {
     loadNotes();
   }, []);
 
-  async function addNote(text: string): Promise<boolean> {
+  async function addNote(
+    title: string,
+    text: string,
+    date: string,
+  ): Promise<boolean> {
     const { data, error } = await supabase
       .from('notes')
-      .insert({ text })
+      .insert({ title, text, date })
       .select()
       .single();
     if (error) {
@@ -51,12 +57,17 @@ export default function Page() {
     setNotes((current) => current.filter((note) => note.id !== id));
   }
 
-  async function editNote(id: string, text: string): Promise<boolean> {
-    const trimmed = text.trim();
-    if (!trimmed) return false;
+  async function editNote(
+    id: string,
+    title: string,
+    text: string,
+  ): Promise<boolean> {
+    const trimmedTitle = title.trim();
+    const trimmedText = text.trim();
+    if (!trimmedText && !trimmedTitle) return false;
     const { error } = await supabase
       .from('notes')
-      .update({ text: trimmed })
+      .update({ title: trimmedTitle, text: trimmedText })
       .eq('id', id);
     if (error) {
       console.error('Failed to update note:', error);
@@ -64,7 +75,9 @@ export default function Page() {
       return false;
     }
     setNotes((current) =>
-      current.map((note) => (note.id === id ? { ...note, text: trimmed } : note))
+      current.map((note) =>
+        note.id === id ? { ...note, title: trimmedTitle, text: trimmedText } : note,
+      ),
     );
     return true;
   }
