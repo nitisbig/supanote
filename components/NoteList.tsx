@@ -78,10 +78,10 @@ export default function NoteList({
                   }
                 }}
               >
-                <EditIcon width={20} height={20} />
+                <EditIcon width={16} height={16} />
               </button>
               <button aria-label="Delete" onClick={() => onDelete(note.id)}>
-                <DeleteIcon width={20} height={20} />
+                <DeleteIcon width={16} height={16} />
               </button>
             </div>
           </li>
