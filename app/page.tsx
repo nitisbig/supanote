@@ -9,7 +9,7 @@ interface Note {
   id: string;
   title: string;
   text: string;
-  date: string;
+  created_at: string;
 }
 
 export default function Page() {
@@ -28,14 +28,10 @@ export default function Page() {
     loadNotes();
   }, []);
 
-  async function addNote(
-    title: string,
-    text: string,
-    date: string,
-  ): Promise<boolean> {
+  async function addNote(title: string, text: string): Promise<boolean> {
     const { data, error } = await supabase
       .from('notes')
-      .insert({ title, text, date })
+      .insert({ title, text })
       .select()
       .single();
     if (error) {
