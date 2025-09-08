@@ -7,7 +7,7 @@ interface Note {
   id: string;
   title: string;
   text: string;
-  date: string;
+  created_at: string;
 }
 
 export default function NoteList({
@@ -71,7 +71,7 @@ export default function NoteList({
           >
             <span className="note-title">{note.title}</span>
             <span className="note-date">
-              {new Date(note.date).toLocaleDateString()}
+              {new Date(note.created_at).toLocaleDateString()}
             </span>
             <span className="note-text">{note.text}</span>
             <div className="note-actions">

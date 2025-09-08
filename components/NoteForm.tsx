@@ -6,18 +6,16 @@ import { PlusIcon } from './Icons';
 export default function NoteForm({
   onAdd,
 }: {
-  onAdd: (title: string, text: string, date: string) => Promise<boolean>;
+  onAdd: (title: string, text: string) => Promise<boolean>;
 }) {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
-  const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [open, setOpen] = useState(false);
 
   function close() {
     setOpen(false);
     setTitle('');
     setText('');
-    setDate(new Date().toISOString().split('T')[0]);
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -25,7 +23,7 @@ export default function NoteForm({
     const trimmedTitle = title.trim();
     const trimmedText = text.trim();
     if (!trimmedText && !trimmedTitle) return;
-    const saved = await onAdd(trimmedTitle, trimmedText, date);
+    const saved = await onAdd(trimmedTitle, trimmedText);
     if (saved) {
       close();
     }
@@ -44,11 +42,6 @@ export default function NoteForm({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Title"
-            />
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
             />
             <textarea
               autoFocus
